@@ -1,0 +1,24 @@
+component: scf
+name: my-poker-project
+org: poker-user
+app: my-poker-project
+
+inputs:
+  name: my-poker-project
+  runtime: Nodejs18.15
+  region: ap-hongkong
+  handler: server.main_handler
+  entryFile: server.js
+  memorySize: 256
+  timeout: 30
+  events:
+    - apigw:
+        parameters:
+          protocol: http&ws
+          serviceName: my-poker-project-service
+          description: Poker WebSocket Server
+          enableCdn: true
+          environment: release
+          endpoints:
+            - path: /
+              method: ANY
