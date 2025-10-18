@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dealer</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    input, button { margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <h1>发牌端</h1>
+  <label>玩家ID: <input type="text" id="playerId"></label><br>
+  <label>底牌(两张, 逗号分隔, 例如: A♠,K♥):</label><br>
+  <input type="text" id="holeCards"><br>
+  <label>公共牌(五张, 逗号分隔):</label><br>
+  <input type="text" id="communityCards"><br>
+  <button id="sendBtn">发送牌</button>
+
+  <script>
+    const ws = new WebSocket(`ws://${location.host}`);
+
+    document.getElementById('sendBtn').onclick = () => {
+      const playerId = document.getElementById('playerId').value;
+      const hole = document.getElementById('holeCards').value;
+      const community = document.getElementById('communityCards').value;
+
+      ws.send(JSON.stringify({
+        type: 'deal',
+        playerId,
+        holeCards: hole.split(',').map(c => c.trim()),
+        communityCards: community.split(',').map(c => c.trim())
+      }));
+    };
+  </script>
+</body>
+</html>

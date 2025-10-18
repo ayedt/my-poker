@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Player</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    pre { background: #f0f0f0; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h1>玩家端</h1>
+  <label>输入你的ID: <input type="text" id="playerId"></label>
+  <pre id="log"></pre>
+
+  <script>
+    const ws = new WebSocket(`ws://${location.host}`);
+    const logEl = document.getElementById('log');
+    const playerInput = document.getElementById('playerId');
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === 'deal' && data.playerId === playerInput.value) {
+        logEl.textContent = `你的底牌: ${data.holeCards.join(', ')}\n公共牌: ${data.communityCards.join(', ')}`;
+      }
+    };
+  </script>
+</body>
+</html>
